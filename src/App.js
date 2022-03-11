@@ -2,8 +2,12 @@ import './App.css'
 import React, { Component } from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import {ethers} from 'ethers';
+import abi from './contract.json';
 
 class App extends Component {
+
+  contract_address = '0xd092873B9bB03ecdb4E5D168939096a8e44C8057'
 
   state = {
     input: '',
@@ -16,6 +20,10 @@ class App extends Component {
 
   changeMessage = () => {
     console.log("changeText called")
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    let contract = new ethers.Contract(this.contract_address, abi, signer);
+    contract.update("Hello World");
   }
 
   seeMessage = () => {
@@ -32,7 +40,7 @@ class App extends Component {
           onChange={this.handleInputChange} />
         <Button
           variant="contained"
-          onClick={this.changeM}>Change Message</Button>
+          onClick={this.changeMessage}>Change Message</Button>
         <Button
           variant="contained"
           onClick={this.seeText}>See Message</Button>
